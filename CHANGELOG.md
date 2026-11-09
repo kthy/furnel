@@ -12,6 +12,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * Man page in the `.deb` package and the Linux release archives.
+* `-x` accepts comma-separated lists (`-x css,html`) and extensions with a leading dot (`-x .css`).
+
+### Changed
+
+* Output is written to `<file>.br.tmp` and renamed to `<file>.br` when complete, so an interrupted
+  run never leaves a truncated `.br` file that `--only-missing` would then skip.
+* Errors print a one-line message and exit with a sysexits code (64 usage, 66 input, 74 output)
+  instead of panicking. Furnel stops at the first error.
+* All extension patterns are validated before any file is compressed.
+* Files are streamed through the encoder instead of being read into memory whole.
+
+### Fixed
+
+* `furnel ./` searched the filesystem root instead of the current directory.
+* Base paths containing glob characters such as `[` or `*` matched nothing.
+* Write errors on the final brotli block were silently ignored.
+* Progress dots were buffered until the end of the run instead of appearing per file.
 
 ## [0.1.4] - 2026-10-07
 

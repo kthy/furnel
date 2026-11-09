@@ -6,10 +6,10 @@
  *************************************************************************************************/
 
 /// Clap about text.
-pub static ABOUT: &str = "A CLI tool that compresses files using the brotli algorithm.";
+pub const ABOUT: &str = "A CLI tool that compresses files using the brotli algorithm.";
 
 /// Clap after-help text.
-pub static AFTER_HELP: &str = "LEGAL NOTICE:
+pub const AFTER_HELP: &str = "LEGAL NOTICE:
     This Software is released under the MIT License (SPDX: \"MIT\") and is
     copyright © 2022-2026 Kristian Thy <thy@42.dk>. It includes code from
     the following projects:
@@ -24,14 +24,14 @@ pub static AFTER_HELP: &str = "LEGAL NOTICE:
 ";
 
 /// Glob options.
-pub static GLOPTS: glob::MatchOptions = glob::MatchOptions {
+pub const GLOPTS: glob::MatchOptions = glob::MatchOptions {
     case_sensitive: false,
     require_literal_separator: true,
     require_literal_leading_dot: false,
 };
 
 /// Full license notice.
-pub static LICENSES: &str = "CLAP, Copyright © 2015-2016 Kevin B. Knapp
+pub const LICENSES: &str = "CLAP, Copyright © 2015-2016 Kevin B. Knapp
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation

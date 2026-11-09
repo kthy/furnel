@@ -44,7 +44,8 @@ Arguments:
 
 Options:
   -x, --extension <EXTENSION>  File extensions to process, for example `-x css
-                               -x html -x js` [default: css html js svg txt]
+                               -x html` or `-x css,html` [default: css html js
+                               svg txt]
   -l, --license                Display full license notice
   -m, --only-missing           Only compress missing files, i.e. those where no
                                corresponding .br files are present
@@ -53,6 +54,18 @@ Options:
   -h, --help                   Print help
   -V, --version                Print version
 ```
+
+Each file is compressed into a temporary `<file>.br.tmp` and renamed to `<file>.br` once complete,
+so an interrupted run never leaves a truncated `.br` file behind. Furnel stops at the first error.
+
+### Exit status
+
+| Code | Meaning                                                       |
+|------|---------------------------------------------------------------|
+| 0    | Success                                                       |
+| 64   | Usage error: base path is not a directory, or invalid pattern |
+| 66   | An input file or directory could not be read                  |
+| 74   | An output file could not be written                           |
 
 ## Building
 
