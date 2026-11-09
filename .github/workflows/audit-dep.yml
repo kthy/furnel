@@ -24,4 +24,4 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - run: cargo install cargo-audit && cargo audit
+      - run: cargo install cargo-audit@0.22.2 --locked && cargo audit
