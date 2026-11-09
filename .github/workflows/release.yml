@@ -41,7 +41,7 @@ jobs:
         run: rustup toolchain install 1.85 --profile minimal --target "$TARGET" && rustup default 1.85
       - name: Install cross
         if: matrix.job.use-cross
-        run: cargo install cross --locked
+        run: cargo install cross@0.2.5 --locked
       - name: Test
         shell: bash
         env:
@@ -50,9 +50,9 @@ jobs:
           FLAGS: ${{ matrix.job.flags }}
         run: |
           if [ "$USE_CROSS" = "true" ]; then
-            cross test --target "$TARGET" $FLAGS
+            cross test --locked --target "$TARGET" $FLAGS
           else
-            cargo test --target "$TARGET" $FLAGS
+            cargo test --locked --target "$TARGET" $FLAGS
           fi
 
   release:
@@ -105,7 +105,7 @@ jobs:
 
       - name: Install cross
         if: matrix.job.use-cross
-        run: cargo install cross --locked
+        run: cargo install cross@0.2.5 --locked
 
       - name: Build target
         shell: bash
@@ -115,9 +115,9 @@ jobs:
           FLAGS: ${{ matrix.job.flags }}
         run: |
           if [ "$USE_CROSS" = "true" ]; then
-            cross build --release --target "$TARGET" $FLAGS
+            cross build --locked --release --target "$TARGET" $FLAGS
           else
-            cargo build --release --target "$TARGET" $FLAGS
+            cargo build --locked --release --target "$TARGET" $FLAGS
           fi
 
       - name: Strip release binary
@@ -174,7 +174,7 @@ jobs:
         env:
           JOB_TARGET: ${{ matrix.job.target }}
         run: |
-          cargo install cargo-deb
+          cargo install cargo-deb@3.8.0 --locked
           cargo deb --no-build --target "$JOB_TARGET"
           cp "target/$JOB_TARGET/debian"/*.deb ./
 
