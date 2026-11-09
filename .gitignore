@@ -2,3 +2,4 @@
 *.br
 /target
 /doc/furnel.1
+/.scannerwork/

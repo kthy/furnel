@@ -67,3 +67,37 @@ jobs:
           TOOLCHAIN: ${{ matrix.rust }}
         run: rustup toolchain install "$TOOLCHAIN" --profile minimal --component clippy && rustup default "$TOOLCHAIN"
       - run: cargo clippy -- -D warnings
+
+  sonar:
+    name: SonarQube Cloud
+    # The token is a secret of this environment only. No deployment is recorded.
+    environment:
+      name: sonarcloud
+      deployment: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # blame information for new code detection
+          persist-credentials: false
+      - run: rustup toolchain install stable --profile minimal --component clippy,llvm-tools
+      - uses: taiki-e/install-action@86f7a0ffb25f40114606501a311ebcfaf882ea32 # v2.88.0
+        with:
+          tool: cargo-llvm-cov@0.9.1
+      - run: cargo llvm-cov --lcov --output-path target/lcov.info
+      - run: cargo clippy --all-targets --message-format=json > target/clippy.json
+      - name: Read the version
+        id: version
+        run: echo "version=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[0].version')" >> "$GITHUB_OUTPUT"
+      # Pull requests from forks get no secrets, so they are not analysed.
+      - name: Check for a token
+        id: token
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: echo "present=$([ -n "$SONAR_TOKEN" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+      - uses: SonarSource/sonarqube-scan-action@e805d875275f728fac1885b413934be6d7c63f65 # v8.4.1
+        if: steps.token.outputs.present == 'true'
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: -Dsonar.projectVersion=${{ steps.version.outputs.version }}
