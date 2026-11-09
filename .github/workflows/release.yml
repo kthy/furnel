@@ -47,12 +47,11 @@ jobs:
         env:
           TARGET: ${{ matrix.job.target }}
           USE_CROSS: ${{ matrix.job.use-cross }}
-          FLAGS: ${{ matrix.job.flags }}
         run: |
           if [ "$USE_CROSS" = "true" ]; then
-            cross test --locked --target "$TARGET" $FLAGS
+            cross test --locked --target "$TARGET"
           else
-            cargo test --locked --target "$TARGET" $FLAGS
+            cargo test --locked --target "$TARGET"
           fi
 
   release:
@@ -112,12 +111,11 @@ jobs:
         env:
           TARGET: ${{ matrix.job.target }}
           USE_CROSS: ${{ matrix.job.use-cross }}
-          FLAGS: ${{ matrix.job.flags }}
         run: |
           if [ "$USE_CROSS" = "true" ]; then
-            cross build --locked --release --target "$TARGET" $FLAGS
+            cross build --locked --release --target "$TARGET"
           else
-            cargo build --locked --release --target "$TARGET" $FLAGS
+            cargo build --locked --release --target "$TARGET"
           fi
 
       - name: Strip release binary
